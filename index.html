@@ -2,7 +2,8 @@
 <html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
 <title>Thank a Teacher</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -337,18 +338,134 @@ td.c{text-align:center;font-variant-numeric:tabular-nums}
 .was{font-size:12.5px;color:var(--muted);background:var(--bg);border-radius:8px;padding:9px 12px;margin-bottom:16px}
 .was b{color:var(--ink)}
 
-@media(max-width:1100px){.kpis{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+.ttl{display:flex;align-items:center;gap:9px}
+#syncDotM{display:none}
+
+@media(max-width:1100px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .g2,.g2.even{grid-template-columns:1fr}
+}
+
+/* ---------- tablet ---------- */
 @media(max-width:860px){
-  .app{flex-direction:column}
-  aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;gap:10px;padding:14px 16px;overflow-x:auto;border-inline-end:0;border-bottom:1px solid var(--line)}
-  .logo{padding:0;margin-inline-end:8px}
-  nav.side{flex-direction:row;gap:4px}
-  .nav-i{padding:9px 12px;white-space:nowrap}
-  .nav-i .badge{display:none}
-  .side-foot{display:none}
-  .content,.topbar{padding-inline:16px}
-  .kpis{grid-template-columns:1fr}
+  aside{width:212px;padding:20px 12px}
+  .content{padding:20px 18px 60px}
+  .topbar{padding:16px 18px}
   .form-grid{grid-template-columns:1fr}
+}
+
+/* ---------- phone ----------
+   The sidebar becomes a thumb-reachable bottom bar and every table
+   turns into a stack of cards, because nine columns on a 375px
+   screen is a horizontal scroll nobody wins. */
+@media(max-width:760px){
+  .app{display:block}
+  aside{
+    position:fixed;inset:auto 0 0 0;width:100%;height:auto;z-index:60;
+    flex-direction:row;padding:5px 4px calc(5px + env(safe-area-inset-bottom));
+    border-inline-end:0;border-top:1px solid var(--line);
+    box-shadow:0 -2px 14px rgba(26,36,48,.07);
+  }
+  .logo,.side-foot{display:none}
+  nav.side{flex-direction:row;width:100%;gap:0}
+  .nav-i{
+    flex:1;flex-direction:column;gap:3px;padding:8px 2px 6px;
+    font-size:10px;font-weight:650;text-align:center;letter-spacing:-.01em;
+    border-radius:12px;min-width:0;
+  }
+  .nav-i span:not(.badge){overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+  .nav-i svg{width:21px;height:21px}
+  .nav-i .badge{display:none}
+  .nav-i[aria-current=page]{background:var(--brand-soft);color:#96690A}
+  main{min-height:100vh}
+  .content{padding:16px 14px 96px}
+  #syncDotM{display:inline-block}
+
+  .topbar{padding:13px 14px;gap:10px}
+  .topbar h1{font-size:17px}
+  .topbar .sub{display:none}
+  .top-actions{width:100%;margin-inline-start:0;gap:7px}
+  .top-actions .btn{flex:1;justify-content:center;padding:9px 6px;font-size:12.5px}
+  .top-actions .btn svg{width:15px;height:15px}
+
+  .card{padding:17px 15px;border-radius:14px}
+  .card-h{margin-bottom:14px}
+  .kpis{grid-template-columns:1fr 1fr;gap:11px;margin-bottom:16px}
+  .kpi{padding:14px 13px;gap:11px;flex-direction:column;align-items:flex-start}
+  .kpi .ic{width:36px;height:36px;border-radius:11px}
+  .kpi .ic svg{width:18px;height:18px}
+  .kpi .val{font-size:22px}
+  .kpi .lbl{font-size:11.5px}
+  .g2{gap:12px;margin-bottom:12px}
+  .chart,.chart.tall{height:290px}
+
+  /* stop iOS zooming the page when a field is focused */
+  .inp,select.inp,textarea.inp,#gatePin{font-size:16px}
+  .filters{gap:9px}
+  .filters .f,.filters .f.grow{min-width:0;width:100%;flex:1 1 100%}
+  .rescount{width:100%;padding-bottom:4px}
+  .form-foot{flex-direction:column-reverse;gap:9px}
+  .form-foot .btn{width:100%;justify-content:center;padding:13px}
+  .seg span{padding:11px 13px}
+
+  /* ---- tables become cards ---- */
+  .tbl-wrap{overflow:visible;max-height:none;border-radius:0}
+  table{font-size:13.5px}
+  thead{display:none}
+  table,tbody,tbody tr,tbody td{display:block;width:100%}
+  tbody tr{
+    background:var(--card);border:1px solid var(--line);border-radius:13px;
+    padding:13px 14px;margin-bottom:10px;
+  }
+  tbody tr:last-child{margin-bottom:0}
+  tbody tr:hover td{background:transparent}
+  tbody tr.rowlead{background:#FCFBF7;border-color:#EFE7D6}
+  tbody tr.rowlead td{background:transparent}
+  tbody td{
+    border-bottom:0;padding:3px 0;display:flex;gap:12px;align-items:flex-start;
+    text-align:start;
+  }
+  tbody td.c{text-align:start;justify-content:flex-start}
+  tbody td::before{
+    content:attr(data-l);flex:none;width:96px;padding-top:1px;
+    font-size:11px;font-weight:700;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.03em;
+  }
+  tbody td:not([data-l])::before{display:none}
+  tbody td.mHead{
+    display:block;padding:0 0 9px;margin-bottom:8px;
+    border-bottom:1px solid var(--line);
+  }
+  tbody td.mHead .pname{font-size:15px}
+  tbody td.mNo::before{content:"#";width:96px}
+  tbody td.mMail{word-break:break-all}
+  tbody td.mAct{padding-top:11px}
+  tbody td.mAct .btn{width:100%;justify-content:center;padding:11px}
+  tbody td:empty{display:none}
+  .empty{padding:34px 16px}
+
+  .statlist .top{gap:10px}
+  .statlist .v{font-size:17px}
+  .modal{padding:0;align-items:flex-end}
+  .modal-c{
+    border-radius:18px 18px 0 0;max-height:92vh;width:100%;
+    padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  }
+  .modal-f{flex-direction:column-reverse;gap:9px}
+  .modal-f .btn{width:100%;justify-content:center;padding:13px}
+  .modal-f .grow{margin-inline-start:0}
+  .toast{inset-inline:12px;top:12px}
+  .gate-card{padding:28px 22px 24px}
+}
+
+@media(max-width:400px){
+  .kpis{grid-template-columns:1fr}
+  .top-actions .btn span{display:none}
+  .top-actions .btn{padding:10px 4px}
+  .top-actions #btnLang{font-size:12.5px}
+  .top-actions #btnLang span{display:inline}
+  tbody td::before{width:82px}
+  tbody td.mNo::before{width:82px}
 }
 </style>
 </head>
@@ -410,7 +527,7 @@ td.c{text-align:center;font-variant-numeric:tabular-nums}
 <main>
   <div class="topbar">
     <div>
-      <h1 id="pgTitle">Overview</h1>
+      <div class="ttl"><h1 id="pgTitle">Overview</h1><span class="dot local" id="syncDotM" title=""></span></div>
       <p class="sub" id="pgSub">Deanship of Academic Development</p>
     </div>
     <div class="top-actions">
@@ -816,6 +933,9 @@ const asList=v=>!v?[]:(Array.isArray(v)?v.filter(Boolean):Object.values(v));
 function setSync(state){
   const d=document.getElementById('syncDot');
   d.className='dot '+(state==='live'?'live':'local');
+  const m=document.getElementById('syncDotM');
+  if(m){ m.className='dot '+(state==='live'?'live':'local');
+         m.title=t(state==='live'?'syncLive':state==='err'?'syncErr':'syncLocal'); }
   document.getElementById('syncTitle').textContent=t(state==='live'?'syncLive':state==='err'?'syncErr':'syncLocal');
   document.getElementById('syncNote').textContent=t(state==='live'?'syncLiveN':state==='err'?'syncErrN':'syncLocalN');
 }
@@ -1078,13 +1198,13 @@ function tblLetters(){
         : (r.raw?`<div class="pdept">${t('asWritten')}${esc(r.raw)}</div>`:'');
       const lf=facOf(r);
       return `<tr class="${lf&&lf.p?'rowlead':''}">
-      <td class="c">${r.id}</td>
-      <td><div class="pname">${nm}${lf?leadPill(lf):''}</div>${sub}</td>
-      <td>${esc(r.dept||'—')}</td><td>${r.col?esc(CN(r.col)):'—'}</td>
-      <td class="c">${r.station==='MIX'?t('notRec'):r.station}</td>
-      <td>${tag(r.st,t(r.st),S.c)}</td>
-      <td class="c">${r.ts||''}</td><td>${esc(r.note||'')}</td>
-      <td style="white-space:nowrap">
+      <td class="c mNo" data-l="${t('cNo')}">${r.id}</td>
+      <td class="mHead"><div class="pname">${nm}${lf?leadPill(lf):''}</div>${sub}</td>
+      <td data-l="${t('cDept')}">${esc(r.dept||'—')}</td><td data-l="${t('cCol')}">${r.col?esc(CN(r.col)):'—'}</td>
+      <td class="c" data-l="${t('cSta')}">${r.station==='MIX'?t('notRec'):r.station}</td>
+      <td data-l="${t('cStat')}">${tag(r.st,t(r.st),S.c)}</td>
+      <td class="c" data-l="${t('cDate')}">${r.ts||''}</td><td data-l="${t('cNote')}">${esc(r.note||'')}</td>
+      <td class="mAct" style="white-space:nowrap">
         <button class="btn sm edbtn" data-id="${r.id}"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17v3z"/></svg>${t('edit')}</button>
       </td>
     </tr>`}).join('')}</tbody>`;
@@ -1120,10 +1240,10 @@ function tblFaculty(){
   el.innerHTML=`<thead><tr><th>${t('cFac')}</th><th>${t('cDept')}</th><th>${t('cCol')}</th>
     <th>${t('cEmail')}</th><th class="c">${t('cLetters')}</th><th class="c">${t('cRec')}</th></tr></thead>
     <tbody>${rows.slice(0,500).map(r=>`<tr class="${r.f.p?'rowlead':''}">
-      <td><div class="pname">${esc(FN(r.f))}${leadPill(r.f)}</div></td>
-      <td>${esc(r.f.d||'')}</td><td>${esc(CN(r.f.c))}</td>
-      <td>${esc(r.f.e||'—')}</td><td class="c">${r.total||''}</td>
-      <td class="c">${r.ap>0?tag('yes',t('yes')):tag('no',t('no'))}</td></tr>`).join('')}</tbody>`;
+      <td class="mHead"><div class="pname">${esc(FN(r.f))}${leadPill(r.f)}</div></td>
+      <td data-l="${t('cDept')}">${esc(r.f.d||'')}</td><td data-l="${t('cCol')}">${esc(CN(r.f.c))}</td>
+      <td data-l="${t('cEmail')}" class="mMail">${esc(r.f.e||'—')}</td><td class="c" data-l="${t('cLetters')}">${r.total||''}</td>
+      <td class="c" data-l="${t('cRec')}">${r.ap>0?tag('yes',t('yes')):tag('no',t('no'))}</td></tr>`).join('')}</tbody>`;
 }
 ['ffCollege','ffDept','ffLead','ffRec','ffSearch'].forEach(i=>document.getElementById(i).oninput=tblFaculty);
 document.getElementById('ffCollege').addEventListener('change',()=>{facDeptOpts();tblFaculty()});
@@ -1156,14 +1276,15 @@ function reports(){
   if(noCol.length)cr.push({n:t('unidentified'),fc:'—',tt:noCol.length,ap:noCol.filter(l=>l.st==='approved').length,rc:'—'});
   document.getElementById('tRepCollege').innerHTML=
     `<thead><tr><th>${t('cCol')}</th><th class="c">${t('cCount')}</th><th class="c">${t('cLetters')}</th><th class="c">${t('approved')}</th><th class="c">${t('cReached')}</th></tr></thead>
-     <tbody>${cr.map(r=>`<tr><td class="pname">${esc(r.n)}</td><td class="c">${r.fc}</td>
-      <td class="c">${r.tt}</td><td class="c">${r.ap}</td><td class="c">${r.rc}</td></tr>`).join('')}</tbody>`;
+     <tbody>${cr.map(r=>`<tr><td class="pname mHead">${esc(r.n)}</td><td class="c" data-l="${t('cCount')}">${r.fc}</td>
+      <td class="c" data-l="${t('cLetters')}">${r.tt}</td><td class="c" data-l="${t('approved')}">${r.ap}</td>
+      <td class="c" data-l="${t('cReached')}">${r.rc}</td></tr>`).join('')}</tbody>`;
 
   document.getElementById('tRepStation').innerHTML=
     `<thead><tr><th>${t('cSta')}</th><th class="c">${t('cLetters')}</th><th class="c">${t('approved')}</th></tr></thead>
      <tbody>${STATIONS.map(s=>{const ls=letters.filter(l=>l.station===s);
-      return `<tr><td class="pname">${s==='MIX'?t('notRec'):s}</td><td class="c">${ls.length}</td>
-        <td class="c">${ls.filter(l=>l.st==='approved').length}</td></tr>`}).join('')}</tbody>`;
+      return `<tr><td class="pname mHead">${s==='MIX'?t('notRec'):s}</td><td class="c" data-l="${t('cLetters')}">${ls.length}</td>
+        <td class="c" data-l="${t('approved')}">${ls.filter(l=>l.st==='approved').length}</td></tr>`}).join('')}</tbody>`;
 }
 
 /* ---------- charts ---------- */
